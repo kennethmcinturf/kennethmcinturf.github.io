@@ -3,30 +3,6 @@ p {
     color: #000
 }
 
-@font-face {
-    font-family: Regular;
-    src: url(../fonts/Graphik-Regular.eot);
-    src: url(../fonts/Graphik-Regular.eot?#iefix) format('embedded-opentype'), url(../fonts/Graphik-Regular.woff) format('woff'), url(../fonts/Graphik-Regular.ttf) format('truetype');
-    font-weight: 400;
-    font-style: normal
-}
-
-@font-face {
-    font-family: Semibold;
-    src: url(../fonts/Graphik-Semibold.eot);
-    src: url(../fonts/Graphik-Semibold.eot?#iefix) format('embedded-opentype'), url(../fonts/Graphik-Semibold.woff) format('woff'), url(../fonts/Graphik-Semibold.ttf) format('truetype');
-    font-weight: 600;
-    font-style: normal
-}
-
-@font-face {
-    font-family: Medium;
-    src: url(../fonts/Graphik-Medium.eot);
-    src: url(../fonts/Graphik-Medium.eot?#iefix) format('embedded-opentype'), url(../fonts/Graphik-Medium.woff) format('woff'), url(../fonts/Graphik-Medium.ttf) format('truetype');
-    font-weight: 500;
-    font-style: normal
-}
-
 a,
 abbr,
 acronym,
@@ -134,8 +110,6 @@ a,
 a:after,
 a:visited {
     background-color: transparent;
-    cursor: url(../img/cursor-fill1x.png) 6 6, auto;
-    cursor: -webkit-image-set(url(../img/cursor-fill1x.png) 1x, url(../img/cursor-fill2x.png) 2x) 6 6, auto;
     text-decoration: none;
     color: #000
 }
