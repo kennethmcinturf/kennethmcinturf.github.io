@@ -1,0 +1,67 @@
+img{
+    visibility: hidden;
+}
+
+h1{
+    font-family: 'Ubuntu', sans-serif;
+}
+
+div{
+    font-family: 'Roboto Mono', monospace;
+}
+
+body{
+    background-color: purple;
+}
+
+.hide-background-img{
+    background-position: -9999px -9999px;
+    background: none !important;
+}
+
+.img-one{
+    /*background-image: url("../img/carolina-panthers.png");*/
+    background: red;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.img-two{
+    /*background-image: url("../img/carolina-panthers.png");*/
+    background: blue;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.img-three{
+    /*background-image: url("../img/charlotte_hornets_logo.jpeg");*/
+    background: yellow;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.img-four{
+    /*background-image: url("../img/chrisitan-mccaffery.jpeg");*/
+    background: green;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.img-five{
+    /*background-image: url("../img/kawann_short.jpeg");*/
+    background: pink;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.img-six{
+    /*background-image: url("../img/luke_Kuechly.jpeg");*/
+    background: black;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.hide{
+    visibility: hidden;
+}
+

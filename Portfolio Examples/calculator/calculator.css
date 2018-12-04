@@ -1,0 +1,27 @@
+html,body{
+    height:100%;margin:0;padding:0;
+}
+input{
+    height: 100px;
+    text-align:center;
+    font-size: 20px;
+}
+.container-fluid,.row{
+    height:100%
+}
+.board-container{
+    padding:20px;
+    box-sizing:border-box
+}
+.board{
+    height:90%;
+    padding:40px;
+    border: 1px solid black
+}
+
+.btn{
+    height: 80px;
+    width: 80px;
+    background: #0fb784;
+    margin: 0;
+}

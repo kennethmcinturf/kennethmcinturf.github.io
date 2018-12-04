@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Map</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <style>
+        body {
+            background: url('../../codeup-web-exercises/codeup-web-exercises/img/sunny_background.jpg') no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+        .bolded{
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="jumbotron jumbotron-fluid text-white bg-info">
+        <div class="container text-white bg-info">
+            <h1 class="display-4 text-center text-white bg-info">Weather Application</h1>
+            <p class="lead text-center text-white bg-info">How to find the weather for this place you are trying to find the weather for.</p>
+        </div>
+    </div>
+    <div class="row justify-content-center mb-4">
+        <h2 class="text-center text-white">How many days would you like the forecast for?</h2>
+    </div>
+    <div class="row justify-content-center mb-4">
+        <select id="daysForecast">
+            <option value="threeDay" id="threeDay">3 Days</option>
+            <option value="fourDay" id="fourDay">4 days</option>
+            <option value="fiveDay" id="fiveDay">5 days</option>
+        </select>
+        <button id="selectDays" class="ml-5">Submit</button>
+    </div>
+    <div class="row justify-content-center mb-4">
+        <h2 class="text-center text-white">And What type of Info would you like</h2>
+    </div>
+    <div class="row justify-content-center">
+        <div class="form-check mr-2">
+            <input class="form-check-input" type="checkbox" value="" id="icon" checked>
+            <label class="form-check-label text-white" for="icon">
+                Icon
+            </label>
+        </div>
+        <div class="form-check mr-2">
+            <input class="form-check-input" type="checkbox" value="" id="sky" checked>
+            <label class="form-check-label text-white" for="sky">
+                Sky
+            </label>
+        </div>
+        <div class="form-check mr-2">
+            <input class="form-check-input" type="checkbox" value="" id="humidity" checked>
+            <label class="form-check-label text-white" for="humidity">
+                Humidity
+            </label>
+        </div>
+        <div class="form-check mr-2">
+            <input class="form-check-input" type="checkbox" value="" id="wind" checked>
+            <label class="form-check-label text-white" for="wind">
+                Wind
+            </label>
+        </div>
+        <div class="form-check mr-2">
+            <input class="form-check-input" type="checkbox" value="" id="pressure" checked>
+            <label class="text-white form-check-label" for="pressure">
+                Pressure
+            </label>
+        </div>
+        <button id="selectInfo" class="ml-5">Submit</button>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-4 text-white text-center mt-5" id="city">
+
+        </div>
+    </div>
+    <div class="row justify-content-center" id="forecast">
+        <div class="card text-center text-white bg-info col-4" style="width: 18rem;">
+            <div class="card-body" id="dayOne">
+
+            </div>
+        </div>
+        <div class="card text-center text-white bg-info col-4" style="width: 18rem;">
+            <div class="card-body" id="dayTwo">
+
+            </div>
+        </div>
+        <div class="card text-center text-white bg-info col-4" style="width: 18rem;">
+            <div class="card-body" id="dayThree">
+
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center" id="forecast2">
+        <div class="card text-center text-white bg-info col-6 hidden" style="width: 18rem;" id="cardForDayFour">
+            <div class="card-body" id="dayFour">
+
+            </div>
+        </div>
+        <div class="card text-center text-white bg-info col-6 hidden" style="width: 18rem;" id="cardForDayFive">
+            <div class="card-body" id="dayFive">
+
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-8 text-white text-center mt-5"><h2>See how the weather is in your neck of the woods!</h2></div>
+    </div>
+    <div class="form-group row justify-content-center text-center mt-5">
+        <input class="form-control col-4" id="address" placeholder="Enter address">
+        <button type="submit" class="btn btn-primary ml-2" id="addressSubmit">Submit</button>
+    </div>
+    <div class="row">
+        <div id="map"  style="width:100%;height:400px;" class="mt-5"></div>
+    </div>
+</div>
+<script src="../../codeup-web-exercises/codeup-web-exercises/js/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script>
+    var map;
+    var markerLat;
+    var markerLong;
+    var markerLatandLong;
+    var startingCoordinates;
+    var address = "600 Navarro St #350, San Antonio, TX 78205";
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 13
+        });
+        console.log(address);
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({"address": address}, function (results, status) {
+            markerLat = 0;
+            markerLong = 0;
+            if (status == google.maps.GeocoderStatus.OK) {
+                map.setCenter(results[0].geometry.location);
+                markerLat = results[0].geometry.location.lat;
+                markerLong = results[0].geometry.location.lng;
+                startingCoordinates = { lat : results[0].geometry.location.lat, lng : results[0].geometry.location.lat};
+            } else {
+                alert("Geocoding was not successful - STATUS: " + status);
+            }
+        });
+        markerLat = parseFloat(markerLat);
+        markerLong = parseFloat(markerLong);
+        console.log(markerLat);
+        console.log(markerLong);
+        markerLatandLong = {lat: markerLat, lng: markerLong}
+        console.log(markerLatandLong);
+        var marker = new google.maps.Marker({
+            position: markerLatandLong,
+            map: map,
+            animation: google.maps.Animation.DROP,
+            draggable: true
+        });
+        google.maps.event.addListener(map, "click", function(e) {
+            latLng = e.latLng;
+            markerLatandLong = e.latLng;
+            markerLong = e.latLng.lng;
+            markerLat = e.latLng.lat;
+            if (marker && marker.setMap) {
+                marker.setMap(null);
+            }
+            marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                draggable: true
+            });
+            google.maps.event.addListener(marker, "position_changed", function() {
+                var position = marker.getPosition();
+                markerLong = position.lng;
+                markerLat = position.lat;
+            });
+        });
+        google.maps.event.addListener(marker, "position_changed", function() {
+            var position = marker.getPosition();
+            markerLong = position.lng;
+            markerLat = position.lat;
+        });
+    }
+    function reInitMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 13
+        });
+        console.log(address);
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({"address": address}, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                map.setCenter(results[0].geometry.location);
+                markerLat = results[0].geometry.location.lat;
+                markerLong = results[0].geometry.location.lng;
+                startingCoordinates = { lat : results[0].geometry.location.lat, lng : results[0].geometry.location.lat};
+            } else {
+                alert("Geocoding was not successful - STATUS: " + status);
+            }
+        });
+        markerLat = parseFloat(markerLat);
+        markerLong = parseFloat(markerLong);
+        console.log(markerLat);
+        console.log(markerLong);
+        markerLatandLong = {lat: markerLat, lng: markerLong}
+        console.log(markerLatandLong);
+        var marker = new google.maps.Marker({
+            position: markerLatandLong,
+            map: map,
+            animation: google.maps.Animation.DROP,
+            draggable: true
+        });
+        google.maps.event.addListener(map, "click", function(e) {
+            latLng = e.latLng;
+            markerLatandLong = e.latLng;
+            markerLong = e.latLng.lng;
+            markerLat = e.latLng.lat;
+            if (marker && marker.setMap) {
+                marker.setMap(null);
+            }
+            marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                draggable: true
+            });
+            google.maps.event.addListener(marker, "position_changed", function() {
+                var position = marker.getPosition();
+                markerLong = position.lng;
+                markerLat = position.lat;
+            });
+        });
+        google.maps.event.addListener(marker, "position_changed", function() {
+            var position = marker.getPosition();
+            markerLong = position.lng;
+            markerLat = position.lat;
+        });
+    }
+    var date = new Date();
+    function getDayOfWeek(today) {
+        var dayOfWeek = '';
+        var dayOfWeekInt = 0;
+        dayOfWeekInt += (date.getDay() + today);
+        if (dayOfWeekInt === 7){
+            dayOfWeekInt = 0;
+        } else if (dayOfWeekInt === 7){
+            dayOfWeekInt = 1;
+        }
+        if (dayOfWeekInt === 0){
+            dayOfWeek = "Sunday";
+        }else if (dayOfWeekInt === 1){
+            dayOfWeek = "Monday";
+        }else if (dayOfWeekInt === 2){
+            dayOfWeek = "Tuesday";
+        }else if (dayOfWeekInt === 3){
+            dayOfWeek = "Wednesday";
+        }else if (dayOfWeekInt === 4){
+            dayOfWeek = "Thursday";
+        }else if (dayOfWeekInt === 5){
+            dayOfWeek = "Friday";
+        }else if (dayOfWeekInt === 6){
+            dayOfWeek = "Saturday";
+        }
+        return dayOfWeek
+    }
+    (function() {
+        markerLat = 29.423017;
+        markerLong = -98.48527
+        $('#cardForDayFour').hide();
+        $('#cardForDayFive').hide();
+        $('#map').click(function () {
+            $.get("http://api.openweathermap.org/data/2.5/forecast", {
+                APPID: "eb6b49e473ed32520a0acef71159e770",
+                lat:    markerLat,
+                lon:   markerLong,
+                units: "imperial"
+            }).done(function(data) {
+                $('#city').html(findCity(data));
+                $('#dayOne').html(dayOneWeather(data));
+                $('#dayTwo').html(dayTwoWeather(data));
+                $('#dayThree').html(dayThreeWeather(data));
+                if (data.list[0].weather[0].main === 'Clear'){
+                    $('body').css('background', "url('img/sunny_background.jpg') no-repeat center center fixed");
+                    $('body').css('-webkit-background-size', "cover");
+                    $('body').css('-moz-background-size', "cover");
+                    $('body').css('-o-background-size', "cover");
+                    $('body').css('background-size', "cover");
+                }
+                if (data.list[0].weather[0].main === 'Drizzle' || data.list[0].weather[0].main === 'Rain'){
+                    $('body').css('background', "url('img/cloudyCity.jpeg') no-repeat center center fixed");
+                    $('body').css('-webkit-background-size', "cover");
+                    $('body').css('-moz-background-size', "cover");
+                    $('body').css('-o-background-size', "cover");
+                    $('body').css('background-size', "cover");
+                }
+                if (data.list[0].weather[0].main === 'Snow'){
+                    $('body').css('background', "url('img/snowy-background.jpg') no-repeat center center fixed");
+                    $('body').css('-webkit-background-size', "cover");
+                    $('body').css('-moz-background-size', "cover");
+                    $('body').css('-o-background-size', "cover");
+                    $('body').css('background-size', "cover");
+                }
+                if (data.list[0].weather[0].main === 'Clouds'){
+                    $('body').css('background', "url('img/sky-background.jpg') no-repeat center center fixed");
+                    $('body').css('-webkit-background-size', "cover");
+                    $('body').css('-moz-background-size', "cover");
+                    $('body').css('-o-background-size', "cover");
+                    $('body').css('background-size', "cover");
+                }
+                if (data.list[0].weather[0].main === 'Thunderstorm'){
+                    $('body').css('background', "url('img/thunderstorm-background.jpg') no-repeat center center fixed");
+                    $('body').css('-webkit-background-size', "cover");
+                    $('body').css('-moz-background-size', "cover");
+                    $('body').css('-o-background-size', "cover");
+                    $('body').css('background-size', "cover");
+                }
+            });
+        })
+        $('#selectDays').click(function () {
+            console.log($('#daysForecast')[0].value);
+            if ($('#daysForecast')[0].value === 'threeDay'){
+                $.get("http://api.openweathermap.org/data/2.5/forecast", {
+                    APPID: "eb6b49e473ed32520a0acef71159e770",
+                    lat:    markerLat,
+                    lon:   markerLong,
+                    units: "imperial"
+                }).done(function(data) {
+                    $('#city').html(findCity(data));
+                    $('#dayOne').html(dayOneWeather(data));
+                    $('#dayTwo').html(dayTwoWeather(data));
+                    $('#dayThree').html(dayThreeWeather(data));
+                    $('#cardForDayFour').hide();
+                    $('#cardForDayFive').hide();
+                });
+            }
+            if ($('#daysForecast')[0].value === 'fourDay'){
+                $.get("http://api.openweathermap.org/data/2.5/forecast", {
+                    APPID: "eb6b49e473ed32520a0acef71159e770",
+                    lat:    markerLat,
+                    lon:   markerLong,
+                    units: "imperial"
+                }).done(function(data) {
+                    $('#city').html(findCity(data));
+                    $('#dayOne').html(dayOneWeather(data));
+                    $('#dayTwo').html(dayTwoWeather(data));
+                    $('#dayThree').html(dayThreeWeather(data));
+                    $('#dayFour').html(dayFourWeather(data))
+                    $('#cardForDayFour').show();
+                    $('#cardForDayFive').hide();
+                });
+            }
+            if ($('#daysForecast')[0].value === 'fiveDay'){
+                $.get("http://api.openweathermap.org/data/2.5/forecast", {
+                    APPID: "eb6b49e473ed32520a0acef71159e770",
+                    lat:    markerLat,
+                    lon:   markerLong,
+                    units: "imperial"
+                }).done(function(data) {
+                    $('#city').html(findCity(data));
+                    $('#dayOne').html(dayOneWeather(data));
+                    $('#dayTwo').html(dayTwoWeather(data));
+                    $('#dayThree').html(dayThreeWeather(data));
+                    $('#cardForDayFour').show();
+                    $('#cardForDayFive').show();
+                    $('#dayFour').html(dayFourWeather(data));
+                    $('#dayFive').html(dayFiveWeather(data));
+                });
+            }
+        });
+        $('#selectInfo').click(function () {
+            if ($('#icon')[0].checked === true){
+                $('img.icon').show();
+            }else {
+                $('img.icon').hide();
+            }
+            if ($('#sky')[0].checked === true){
+                $('p.sky').show();
+            }else {
+                $('p.sky').hide();
+            }
+            if ($('#humidity')[0].checked === true){
+                $('p.humidity').show();
+            }else {
+                $('p.humidity').hide();
+            }
+            if ($('#wind')[0].checked === true){
+                $('p.wind').show();
+            }else {
+                $('p.wind').hide();
+            }
+            if ($('#pressure')[0].checked === true){
+                $('p.pressure').show();
+            }else {
+                $('p.pressure').hide();
+            }
+        })
+        $.get("http://api.openweathermap.org/data/2.5/forecast", {
+            APPID: "eb6b49e473ed32520a0acef71159e770",
+            lat:    29.423017,
+            lon:   -98.48527,
+            units: "imperial"
+        }).done(function(data) {
+            $('#city').html(findCity(data))
+            $('#dayOne').html(dayOneWeather(data));
+            $('#dayTwo').html(dayTwoWeather(data));
+            $('#dayThree').html(dayThreeWeather(data))
+            if (data.list[0].weather[0].main === 'Clear'){
+                $('body').css('background', "url('img/sunny_background.jpg') no-repeat center center fixed");
+                $('body').css('-webkit-background-size', "cover");
+                $('body').css('-moz-background-size', "cover");
+                $('body').css('-o-background-size', "cover");
+                $('body').css('background-size', "cover");
+            }
+            if (data.list[0].weather[0].main === 'Thunderstorm' || data.list[0].weather[0].main === 'Drizzle' || data.list[0].weather[0].main === 'Rain'){
+                $('body').css('background', "url('img/cloudyCity.jpeg') no-repeat center center fixed");
+                $('body').css('-webkit-background-size', "cover");
+                $('body').css('-moz-background-size', "cover");
+                $('body').css('-o-background-size', "cover");
+                $('body').css('background-size', "cover");
+            }
+            if (data.list[0].weather[0].main === 'Snow'){
+                $('body').css('background', "url('img/snowy-background.jpg') no-repeat center center fixed");
+                $('body').css('-webkit-background-size', "cover");
+                $('body').css('-moz-background-size', "cover");
+                $('body').css('-o-background-size', "cover");
+                $('body').css('background-size', "cover");
+            }
+            if (data.list[0].weather[0].main === 'Clouds'){
+                $('body').css('background', "url('img/sky-background.jpg') no-repeat center center fixed");
+                $('body').css('-webkit-background-size', "cover");
+                $('body').css('-moz-background-size', "cover");
+                $('body').css('-o-background-size', "cover");
+                $('body').css('background-size', "cover");
+            }
+        });
+        $('#addressSubmit').click(function () {
+            address = $('#address').val();
+            reInitMap();
+            $.get("http://api.openweathermap.org/data/2.5/forecast", {
+                APPID: "eb6b49e473ed32520a0acef71159e770",
+                lat:    markerLat,
+                lon:   markerLong,
+                units: "imperial"
+            }).done(function(data) {
+                $('#city').html(findCity(data));
+                $('#dayOne').html(dayOneWeather(data));
+                $('#dayTwo').html(dayTwoWeather(data));
+                $('#dayThree').html(dayThreeWeather(data));
+                if (data.list[0].weather[0].main === 'Clear'){
+                    $('body').css('background', "url('img/sunny_background.jpg') no-repeat center center fixed");
+                    $('body').css('-webkit-background-size', "cover");
+                    $('body').css('-moz-background-size', "cover");
+                    $('body').css('-o-background-size', "cover");
+                    $('body').css('background-size', "cover");
+                }
+                if (data.list[0].weather[0].main === 'Drizzle' || data.list[0].weather[0].main === 'Rain'){
+                    $('body').css('background', "url('img/cloudyCity.jpeg') no-repeat center center fixed");
+                    $('body').css('-webkit-background-size', "cover");
+                    $('body').css('-moz-background-size', "cover");
+                    $('body').css('-o-background-size', "cover");
+                    $('body').css('background-size', "cover");
+                }
+                if (data.list[0].weather[0].main === 'Snow'){
+                    $('body').css('background', "url('img/snowy-background.jpg') no-repeat center center fixed");
+                    $('body').css('-webkit-background-size', "cover");
+                    $('body').css('-moz-background-size', "cover");
+                    $('body').css('-o-background-size', "cover");
+                    $('body').css('background-size', "cover");
+                }
+                if (data.list[0].weather[0].main === 'Clouds'){
+                    $('body').css('background', "url('img/sky-background.jpg') no-repeat center center fixed");
+                    $('body').css('-webkit-background-size', "cover");
+                    $('body').css('-moz-background-size', "cover");
+                    $('body').css('-o-background-size', "cover");
+                    $('body').css('background-size', "cover");
+                }
+                if (data.list[0].weather[0].main === 'Thunderstorm'){
+                    $('body').css('background', "url('img/thunderstorm-background.jpg') no-repeat center center fixed");
+                    $('body').css('-webkit-background-size', "cover");
+                    $('body').css('-moz-background-size', "cover");
+                    $('body').css('-o-background-size', "cover");
+                    $('body').css('background-size', "cover");
+                }
+            });
+        })
+        function findCity(data) {
+            var makeHtml = '';
+            makeHtml += '<h1 class="bolded" id="cityName">' + data.city.name + '</h1>';
+            return makeHtml
+        }
+        function dayOneWeather(info) {
+            var makeHtml = '';
+            makeHtml += '<h5 class="card-title">' + getDayOfWeek(0) + '</h5>';
+            makeHtml += '<h6 class="card-title">' + parseInt(getMinMaxDayTemp(info, 1).min) + '/' + parseInt(getMinMaxDayTemp(info, 1).max) + '</h6>';
+            makeHtml += '<img class="icon" src=' + "http://openweathermap.org/img/w/" + info.list[0].weather[0].icon + '.png' +'>';
+            makeHtml += '<p class="card-text sky">' + info.list[0].weather[0].description + '</p>';
+            makeHtml += '<p class="card-title humidity">' + '<span class="bolded">' + 'Humidity: ' + '</span>' + info.list[0].main.humidity + '</p>';
+            makeHtml += '<p class="card-title wind">' + '<span class="bolded">' + 'Wind: ' + '</span>' + info.list[0].wind.speed + '</p>';
+            makeHtml += '<p class="card-title pressure">' + '<span class="bolded">' + 'Pressure: ' + '</span>' + info.list[0].main.pressure + '</p>';
+            return makeHtml
+        }
+        function dayTwoWeather(info) {
+            var makeHtml = '';
+            makeHtml += '<h5 class="card-title">' + getDayOfWeek(1) + '</h5>';
+            makeHtml += '<h6 class="card-title">' + parseInt(getMinMaxDayTemp(info, 2).min) + '/' + parseInt(getMinMaxDayTemp(info, 2).max) + '</h6>';
+            makeHtml += '<img class="icon" src=' + "http://openweathermap.org/img/w/" + info.list[7].weather[0].icon + '.png' +'>';
+            makeHtml += '<p class="card-text sky">'  + info.list[7].weather[0].description + '</p>';
+            makeHtml += '<p class="card-text humidity">' + '<span class="bolded">' + 'Humidity: ' + '</span>' + info.list[7].main.humidity + '</p>';
+            makeHtml += '<p class="card-text wind">' + '<span class="bolded">' + 'Wind: ' +  '</span>' + info.list[7].wind.speed + '</p>';
+            makeHtml += '<p class="card-text pressure">' + '<span class="bolded">' +  'Pressure: ' +  '</span>'  + info.list[7].main.pressure + '</p>';
+            return makeHtml
+        }
+        function dayThreeWeather(info) {
+            var makeHtml = '';
+            makeHtml += '<h5 class="card-title">' + getDayOfWeek(2) + '</h5>';
+            makeHtml += '<h6 class="card-title">' + parseInt(getMinMaxDayTemp(info, 3).min) + '/' + parseInt(getMinMaxDayTemp(info, 3).max) + '</h6>';
+            makeHtml += '<img class="icon" src=' + "http://openweathermap.org/img/w/" + info.list[15].weather[0].icon + '.png' +'>';
+            makeHtml += '<p class="card-text sky">' + info.list[15].weather[0].description + '</p>';
+            makeHtml += '<p class="card-text humidity">' + '<span class="bolded">' + 'Humidity: ' + '</span>' + info.list[15].main.humidity + '</p>';
+            makeHtml += '<p class="card-text wind">' + '<span class="bolded">' + 'Wind: ' + '</span>' + info.list[15].wind.speed + '</p>';
+            makeHtml += '<p class="card-text pressure">' + '<span class="bolded">' + 'Pressure: ' + '</span>' + info.list[15].main.pressure + '</p>';
+            return makeHtml
+        }
+        function dayFourWeather(info) {
+            var makeHtml = '';
+            makeHtml += '<h5 class="card-title">' + getDayOfWeek(3) + '</h5>';
+            makeHtml += '<h6 class="card-title">' + parseInt(getMinMaxDayTemp(info, 4).min) + '/' + parseInt(getMinMaxDayTemp(info, 4).max) + '</h6>';
+            makeHtml += '<img class="icon" src=' + "http://openweathermap.org/img/w/" + info.list[23].weather[0].icon + '.png' +'>';
+            makeHtml += '<p class="card-text sky">' + info.list[23].weather[0].description + '</p>';
+            makeHtml += '<p class="card-text humidity">' + '<span class="bolded">' + 'Humidity: ' + '</span>' + info.list[23].main.humidity + '</p>';
+            makeHtml += '<p class="card-text wind">' + '<span class="bolded">' + 'Wind: ' + '</span>' + info.list[23].wind.speed + '</p>';
+            makeHtml += '<p class="card-text pressure">' + '<span class="bolded">' + 'Pressure: ' + '</span>' + info.list[23].main.pressure + '</p>';
+            return makeHtml
+        }
+        function dayFiveWeather(info) {
+            var makeHtml = '';
+            makeHtml += '<h5 class="card-title">' + getDayOfWeek(4) + '</h5>';
+            makeHtml += '<h6 class="card-title">' + parseInt(getMinMaxDayTemp(info, 5).min) + '/' + parseInt(getMinMaxDayTemp(info, 5).max) + '</h6>';
+            makeHtml += '<img class="icon" src=' + "http://openweathermap.org/img/w/" + info.list[31].weather[0].icon + '.png' +'>';
+            makeHtml += '<p class="card-text sky">' + info.list[31].weather[0].description + '</p>';
+            makeHtml += '<p class="card-text humidity">' + '<span class="bolded">' + 'Humidity: ' + '</span>' + info.list[31].main.humidity + '</p>';
+            makeHtml += '<p class="card-text wind">' + '<span class="bolded">' + 'Wind: ' + '</span>' + info.list[31].wind.speed + '</p>';
+            makeHtml += '<p class="card-text pressure">' + '<span class="bolded">' + 'Pressure: ' + '</span>' + info.list[31].main.pressure + '</p>';
+            return makeHtml
+        }
+        const getMinMaxDayTemp = (data, day) => {
+            const temps = data.list.slice(day * 8 - 8, day * 8)
+                .reduce((prev, curr) => {
+                    prev.push(curr.main.temp);
+                    return prev;
+                }, []).sort();
+            return {min: temps.shift(), max: temps.pop()};
+        };
+    })();
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgwoo1-Cutd3eTv8omdM6GJAwmubbT8jg&callback=initMap"
+        async defer></script>
+</body>
+</html>
