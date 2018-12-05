@@ -271,7 +271,7 @@
         $('#cardForDayFour').hide();
         $('#cardForDayFive').hide();
         $('#map').click(function () {
-            $.get("http://api.openweathermap.org/data/2.5/forecast", {
+            $.get("https://api.openweathermap.org/data/2.5/forecast", {
                 APPID: "eb6b49e473ed32520a0acef71159e770",
                 lat:    markerLat,
                 lon:   markerLong,
@@ -321,7 +321,7 @@
         $('#selectDays').click(function () {
             console.log($('#daysForecast')[0].value);
             if ($('#daysForecast')[0].value === 'threeDay'){
-                $.get("http://api.openweathermap.org/data/2.5/forecast", {
+                $.get("https://api.openweathermap.org/data/2.5/forecast", {
                     APPID: "eb6b49e473ed32520a0acef71159e770",
                     lat:    markerLat,
                     lon:   markerLong,
@@ -336,7 +336,7 @@
                 });
             }
             if ($('#daysForecast')[0].value === 'fourDay'){
-                $.get("http://api.openweathermap.org/data/2.5/forecast", {
+                $.get("https://api.openweathermap.org/data/2.5/forecast", {
                     APPID: "eb6b49e473ed32520a0acef71159e770",
                     lat:    markerLat,
                     lon:   markerLong,
@@ -352,7 +352,7 @@
                 });
             }
             if ($('#daysForecast')[0].value === 'fiveDay'){
-                $.get("http://api.openweathermap.org/data/2.5/forecast", {
+                $.get("https://api.openweathermap.org/data/2.5/forecast", {
                     APPID: "eb6b49e473ed32520a0acef71159e770",
                     lat:    markerLat,
                     lon:   markerLong,
@@ -396,7 +396,7 @@
                 $('p.pressure').hide();
             }
         })
-        $.get("http://api.openweathermap.org/data/2.5/forecast", {
+        $.get("https://api.openweathermap.org/data/2.5/forecast", {
             APPID: "eb6b49e473ed32520a0acef71159e770",
             lat:    29.423017,
             lon:   -98.48527,
@@ -438,7 +438,7 @@
         $('#addressSubmit').click(function () {
             address = $('#address').val();
             reInitMap();
-            $.get("http://api.openweathermap.org/data/2.5/forecast", {
+            $.get("https://api.openweathermap.org/data/2.5/forecast", {
                 APPID: "eb6b49e473ed32520a0acef71159e770",
                 lat:    markerLat,
                 lon:   markerLong,
