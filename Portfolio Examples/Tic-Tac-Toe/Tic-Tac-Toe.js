@@ -136,11 +136,13 @@ $(document).ready(function () {
         if ((upperLeft === upperCenter) && (upperCenter === upperRight)){
             if (upperLeft === 1){
                 alert(X);
+                clickCounter = "A";
                 $('#playerXWinner').css("display",'initial');
                 $('.box').off('click');
                 $('#playerO').hide();
                 continueGame = false;
             } else if (upperLeft === 2){
+                clickCounter = "A";
                 alert(Y);
                 $('#playerOWinner').css("display",'initial');
                 $('.box').off('click');
@@ -149,12 +151,14 @@ $(document).ready(function () {
             }
         }else if ((upperLeft === centerLeft) && (centerLeft === lowerLeft)){
             if (upperLeft === 1){
+                clickCounter = "A";
                 alert(X);
                 $('#playerXWinner').css("display",'initial');
                 $('.box').off('click');
                 $('#playerO').hide();
                 continueGame = false;
             } else {
+                clickCounter = "A";
                 alert(Y);
                 $('#playerOWinner').css("display",'initial');
                 $('.box').off('click');
@@ -163,12 +167,14 @@ $(document).ready(function () {
             }
         }else if ((upperCenter === centerCenter) && (centerCenter === lowerCenter)){
             if (upperCenter === 1){
+                clickCounter = "A";
                 alert(X);
                 $('#playerXWinner').css("display",'initial');
                 $('.box').off('click');
                 $('#playerO').hide();
                 continueGame = false;
             } else {
+                clickCounter = "A";
                 alert(Y);
                 $('#playerOWinner').css("display",'initial');
                 $('.box').off('click');
@@ -177,12 +183,14 @@ $(document).ready(function () {
             }
         }else if ((upperRight === centerRight) && (centerRight === lowerRight)){
             if (upperRight === 1){
+                clickCounter = "A";
                 alert(X);
                 $('#playerXWinner').css("display",'initial');
                 $('.box').off('click');
                 $('#playerO').hide();
                 continueGame = false;
             } else {
+                clickCounter = "A";
                 alert(Y);
                 $('#playerOWinner').css("display",'initial');
                 $('.box').off('click');
@@ -191,12 +199,14 @@ $(document).ready(function () {
             }
         }else if ((upperCenter === centerCenter) && (centerCenter === lowerCenter)){
             if (upperCenter === 1){
+                clickCounter = "A";
                 alert(X);
                 $('#playerXWinner').css("display",'initial');
                 $('.box').off('click');
                 $('#playerO').hide();
                 continueGame = false;
             } else {
+                clickCounter = "A";
                 alert(Y);
                 $('#playerOWinner').css("display",'initial');
                 $('.box').off('click');
@@ -205,12 +215,14 @@ $(document).ready(function () {
             }
         }else if ((centerLeft === centerCenter) && (centerCenter === centerRight)){
             if (centerLeft === 1){
+                clickCounter = "A";
                 alert(X);
                 $('#playerXWinner').css("display",'initial');
                 $('.box').off('click');
                 $('#playerO').hide();
                 continueGame = false;
             } else {
+                clickCounter = "A";
                 alert(Y);
                 $('#playerOWinner').css("display",'initial');
                 $('.box').off('click');
@@ -219,12 +231,14 @@ $(document).ready(function () {
             }
         }else if ((lowerLeft === lowerCenter) && (lowerCenter === lowerRight)){
             if (lowerLeft === 1){
+                clickCounter = "A";
                 alert(X);
                 $('#playerXWinner').css("display",'initial');
                 $('.box').off('click');
                 $('#playerO').hide();
                 continueGame = false;
             } else {
+                clickCounter = "A";
                 alert(Y);
                 $('#playerOWinner').css("display",'initial');
                 $('.box').off('click');
@@ -233,12 +247,14 @@ $(document).ready(function () {
             }
         }else if ((upperLeft === centerCenter) && (centerCenter === lowerRight)){
             if (upperLeft === 1){
+                clickCounter = "A";
                 alert(X);
                 $('#playerXWinner').css("display",'initial');
                 $('.box').off('click');
                 $('#playerO').hide();
                 continueGame = false;
             } else {
+                clickCounter = "A";
                 alert(Y);
                 $('#playerOWinner').css("display",'initial');
                 $('.box').off('click');
@@ -247,12 +263,14 @@ $(document).ready(function () {
             }
         }else if ((upperRight === centerCenter) && (centerCenter === lowerLeft)){
             if (upperRight === 1){
+                clickCounter = "A";
                 alert(X);
                 $('#playerXWinner').css("display",'initial');
                 $('.box').off('click');
                 $('#playerO').hide();
                 continueGame = false;
             } else {
+                clickCounter = "A";
                 alert(Y);
                 $('#playerOWinner').css("display",'initial');
                 $('.box').off('click');
@@ -262,12 +280,13 @@ $(document).ready(function () {
         }
     }
     function restartGame (){
-        if (clickCounter === 9 && continueGame === true){
+        if (clickCounter === 9) {
             alert("No One Wins!!");
             alert("Game is Restarting...");
             location.reload();
         }
     }
+    restartGame();
     $('.col-3').click(function () {
         checkForWinner();
         setTimeout(function () {
@@ -327,12 +346,17 @@ $(document).ready(function () {
         e.stopPropagation();
         $('.box').one('click', function (e) {
             e.stopPropagation();
-            if (clickCounter % 2 === 1) {
-                do {
-                    clickSomething();
-                    console.log(clickCounter);
-                }while (clickCounter % 2 === 1);
+            if (clickCounter === 9){
+                return;
             }
+            setTimeout(function () {
+                if (clickCounter % 2 === 1) {
+                    do {
+                        clickSomething();
+                        console.log(clickCounter);
+                    }while (clickCounter % 2 === 1);
+                }
+            }, 1);
         })
     })
 });
